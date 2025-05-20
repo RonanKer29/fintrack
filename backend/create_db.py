@@ -1,7 +1,6 @@
-"""Script pour créer les tables de la base PostgreSQL avec SQLAlchemy."""
-
+# create_db.py
 from app.database import Base, engine
-from app.models import user  # ⚠️ importe tous les modèles ici !
+from app.models import user, asset, portfolio  # 👈 très important d'importer les modèles
 
 print("📦 Création des tables…")
 Base.metadata.create_all(bind=engine)

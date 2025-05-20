@@ -2,7 +2,7 @@
 
 from fastapi import FastAPI
 from dotenv import load_dotenv
-from app.routes import user, base, auth
+from app.routes import user, base, auth, asset, portfolio
 
 load_dotenv()  # Load environment variables from .env
 
@@ -12,3 +12,5 @@ app = FastAPI()
 app.include_router(base.router)
 app.include_router(user.router)
 app.include_router(auth.router)
+app.include_router(asset.router)
+app.include_router(portfolio.router)
