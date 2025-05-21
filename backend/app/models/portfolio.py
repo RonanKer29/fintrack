@@ -17,5 +17,10 @@ class Portfolio(Base):
     description = Column(Text)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
-    # Optional: for reverse relation from user
+    # Relations
     user = relationship("User", back_populates="portfolios")
+    portfolio_assets = relationship(
+        "PortfolioAsset",
+        back_populates="portfolio",
+        cascade="all, delete"
+    )
