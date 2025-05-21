@@ -24,3 +24,4 @@ class User(Base):
     hashed_password = Column(String, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())  # type: ignore
     portfolios = relationship("Portfolio", back_populates="user", cascade="all, delete")
+    transactions = relationship("Transaction", back_populates="user", cascade="all, delete")
