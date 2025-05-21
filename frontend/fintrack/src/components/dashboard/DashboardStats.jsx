@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import DashboardCard from "./DashboardCard";
 
 export default function DashboardStats() {
   const [totalValue, setTotalValue] = useState(null);
@@ -36,9 +37,12 @@ export default function DashboardStats() {
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
-    <div className="p-6 text-center bg-white rounded-md shadow max-w-1/4">
-      <h2 className="text-lg font-semibold text-gray-700">Valeur totale</h2>
-      <p className="mt-2 text-2xl font-bold text-primary">{totalValue} USD</p>
-    </div>
+    <DashboardCard
+      title="Valeur totale"
+      description="Montant global de vos actifs"
+      value={`${totalValue} USD`}
+      loading={loading}
+      error={error}
+    />
   );
 }

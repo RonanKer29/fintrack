@@ -34,7 +34,7 @@ def create_user(user: UserCreate, db: Annotated[Session, Depends(get_db)]):
     # Hash du mot de passe avec passlib
     hashed_pwd = hash_password(user.password)
 
-    new_user = User(email=user.email, hashed_password=hashed_pwd)
+    new_user = User(email=user.email, hashed_password=hashed_pwd, username=user.username)
     db.add(new_user)
     db.commit()
     db.refresh(new_user)

@@ -17,7 +17,7 @@ Base.metadata.create_all(bind=engine)
 
 # 👤 User
 hashed_pwd = pwd_context.hash("test1234")
-user_obj = user.User(email="test@example.com", hashed_password=hashed_pwd)
+user_obj = user.User(email="test@example.com", hashed_password=hashed_pwd, username="test")
 db.add(user_obj)
 db.commit()
 db.refresh(user_obj)

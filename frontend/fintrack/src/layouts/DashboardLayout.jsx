@@ -76,8 +76,8 @@ export default function DashboardLayout({ children }) {
         <header className="flex items-center justify-between h-16 px-6 bg-white border-b">
           {user && (
             <h2 className="text-lg font-semibold">
-              Bienvenue,
-              <span className="ml-1 font-bold underline underline-offset-2">
+              Welcome,
+              <span className="ml-1 font-bold text-primary">
                 {user.username || user.email}
               </span>
             </h2>

@@ -12,6 +12,7 @@ class UserBase(BaseModel):
         email (EmailStr): Email address of the user.
     """
     email: EmailStr
+    username: str  # ← AJOUTÉ
 
 
 class UserCreate(UserBase):
