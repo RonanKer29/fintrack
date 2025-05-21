@@ -1,4 +1,3 @@
-import DashboardStats from "@/components/dashboard/DashboardStats";
 import PortfolioChart from "@/components/dashboard/PortfolioChart";
 import RecentTransactions from "@/components/dashboard/RecentTransactions";
 import TopAssets from "@/components/dashboard/TopAssets";
@@ -8,18 +7,16 @@ import DashboardLayout from "@/layouts/DashboardLayout";
 export default function Dashboard() {
   return (
     <DashboardLayout>
-      {/* Header principal */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Tableau de bord</h1>
+        <h1 className="text-2xl font-bold">Tableau de bord</h1>
         <p className="text-sm text-muted-foreground">
-          Suivi de vos investissements et performances.
+          Suivi de vos investissements en temps réel.
         </p>
       </div>
 
       {/* Statistiques principales */}
       <div className="grid grid-cols-1 gap-4 mb-6 sm:grid-cols-2 lg:grid-cols-3">
         <UserPortfolios />
-        <DashboardStats />
       </div>
 
       {/* Graphique + Top actifs */}

@@ -1,13 +1,12 @@
-"""Pydantic schemas for Asset."""
-
-from pydantic import BaseModel
 from datetime import datetime
+from typing import Literal
+from pydantic import BaseModel
 
 
 class AssetBase(BaseModel):
     ticker: str
     name: str | None = None
-    type: str
+    type: Literal["stock", "etf", "crypto"]
     currency: str
 
 

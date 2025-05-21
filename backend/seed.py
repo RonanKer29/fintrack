@@ -22,16 +22,31 @@ db.add(user_obj)
 db.commit()
 db.refresh(user_obj)
 
-# 📈 Asset
-asset_obj = asset.Asset(
+# 📈 Assets (ETF, Stock, Crypto)
+asset_etf = asset.Asset(
     ticker="VTI",
     name="Vanguard Total Stock Market ETF",
-    type="ETF",
+    type="etf",
     currency="USD"
 )
-db.add(asset_obj)
+asset_stock = asset.Asset(
+    ticker="AAPL",
+    name="Apple Inc.",
+    type="stock",
+    currency="USD"
+)
+asset_crypto = asset.Asset(
+    ticker="BTC-USD",
+    name="Bitcoin",
+    type="crypto",
+    currency="USD"
+)
+
+db.add_all([asset_etf, asset_stock, asset_crypto])
 db.commit()
-db.refresh(asset_obj)
+db.refresh(asset_etf)
+db.refresh(asset_stock)
+db.refresh(asset_crypto)
 
 # 💼 Portfolio
 portfolio_obj = portfolio.Portfolio(
@@ -44,20 +59,36 @@ db.add(portfolio_obj)
 db.commit()
 db.refresh(portfolio_obj)
 
-# 🔗 PortfolioAsset
-pa_obj = portfolio_asset.PortfolioAsset(
+# 🔗 PortfolioAssets (liés aux 3 types)
+pa_etf = portfolio_asset.PortfolioAsset(
     portfolio_id=portfolio_obj.id,
-    asset_id=asset_obj.id,
+    asset_id=asset_etf.id,
     quantity=15,
     average_price=205.0,
     purchase_date=date(2024, 1, 1),
     currency="USD"
 )
-db.add(pa_obj)
-db.commit()
-db.refresh(pa_obj)
+pa_stock = portfolio_asset.PortfolioAsset(
+    portfolio_id=portfolio_obj.id,
+    asset_id=asset_stock.id,
+    quantity=10,
+    average_price=180.0,
+    purchase_date=date(2024, 2, 1),
+    currency="USD"
+)
+pa_crypto = portfolio_asset.PortfolioAsset(
+    portfolio_id=portfolio_obj.id,
+    asset_id=asset_crypto.id,
+    quantity=0.05,
+    average_price=60000.0,
+    purchase_date=date(2024, 3, 1),
+    currency="USD"
+)
 
-# 🔁 Transactions (multi)
+db.add_all([pa_etf, pa_stock, pa_crypto])
+db.commit()
+
+# 🔁 Transactions (uniquement sur VTI pour l'exemple)
 transactions_data = [
     {"type": "buy", "quantity": 10, "price": 200.0, "date": date(2024, 1, 1)},
     {"type": "buy", "quantity": 5, "price": 210.0, "date": date(2024, 2, 1)},
@@ -68,7 +99,7 @@ transactions_data = [
 for tx in transactions_data:
     tx_obj = transaction.Transaction(
         user_id=user_obj.id,
-        asset_id=asset_obj.id,
+        asset_id=asset_etf.id,
         portfolio_id=portfolio_obj.id,
         type=tx["type"],
         quantity=tx["quantity"],
@@ -80,19 +111,19 @@ for tx in transactions_data:
 
 db.commit()
 
-# 📉 Price History (today & 7 days ago)
+# 📉 Price History (sur VTI uniquement)
 today = date.today()
 seven_days_ago = today - timedelta(days=7)
 
 price_history_entries = [
     price_history.PriceHistory(
-        asset_id=asset_obj.id,
+        asset_id=asset_etf.id,
         date=seven_days_ago,
         price=210.0,
         currency="USD"
     ),
     price_history.PriceHistory(
-        asset_id=asset_obj.id,
+        asset_id=asset_etf.id,
         date=today,
         price=220.0,
         currency="USD"
