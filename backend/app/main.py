@@ -1,5 +1,5 @@
 """Main entrypoint for the FastAPI application."""
-
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 from dotenv import load_dotenv
 
@@ -8,6 +8,15 @@ from app.routers import base, auth, asset, portfolio_assets, portfolios, users, 
 load_dotenv()  # Load environment variables from .env
 
 app = FastAPI()
+
+# Autoriser les requêtes venant du frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Register routers
 app.include_router(base.router)

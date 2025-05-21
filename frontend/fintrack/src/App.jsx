@@ -1,5 +1,7 @@
+import AppRouter from "./router";
+
 function App() {
-  return <div className="text-4xl">test</div>;
+  return <AppRouter />;
 }
 
 export default App;
