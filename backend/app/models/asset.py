@@ -17,3 +17,4 @@ class Asset(Base):
     currency = Column(String)  # ex: USD, EUR, CHF
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     asset_portfolios = relationship("PortfolioAsset", back_populates="asset")
+    price_history = relationship("PriceHistory", back_populates="asset", cascade="all, delete")

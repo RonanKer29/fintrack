@@ -22,5 +22,5 @@ class PortfolioAsset(Base):
     currency = Column(String)
 
     # Relationships
-    portfolio = relationship("Portfolio", back_populates="portfolio_assets")
+    portfolio = relationship("Portfolio", back_populates="assets")
     asset = relationship("Asset")

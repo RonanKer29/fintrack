@@ -2,7 +2,7 @@
 
 from app.database import Base, engine, SessionLocal
 from app.models import user, asset, portfolio, portfolio_asset, transaction, price_history
-from datetime import date
+from datetime import date, timedelta
 from passlib.context import CryptContext
 
 # Init
@@ -80,14 +80,26 @@ for tx in transactions_data:
 
 db.commit()
 
-# 📉 Price History
-ph_obj = price_history.PriceHistory(
-    asset_id=asset_obj.id,
-    date=date(2024, 1, 1),
-    price=200.0,
-    currency="USD"
-)
-db.add(ph_obj)
+# 📉 Price History (today & 7 days ago)
+today = date.today()
+seven_days_ago = today - timedelta(days=7)
+
+price_history_entries = [
+    price_history.PriceHistory(
+        asset_id=asset_obj.id,
+        date=seven_days_ago,
+        price=210.0,
+        currency="USD"
+    ),
+    price_history.PriceHistory(
+        asset_id=asset_obj.id,
+        date=today,
+        price=220.0,
+        currency="USD"
+    ),
+]
+
+db.add_all(price_history_entries)
 db.commit()
 
 print("✅ Seed completed successfully.")

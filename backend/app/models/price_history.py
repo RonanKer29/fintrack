@@ -2,6 +2,7 @@
 
 from sqlalchemy import Column, Integer, ForeignKey, Numeric, String, Date
 from app.database import Base
+from sqlalchemy.orm import relationship
 
 
 class PriceHistory(Base):
@@ -17,3 +18,4 @@ class PriceHistory(Base):
     date = Column(Date)
     price = Column(Numeric)
     currency = Column(String)
+    asset = relationship("Asset", back_populates="price_history")

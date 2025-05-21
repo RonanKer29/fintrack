@@ -19,8 +19,4 @@ class Portfolio(Base):
 
     # Relations
     user = relationship("User", back_populates="portfolios")
-    portfolio_assets = relationship(
-        "PortfolioAsset",
-        back_populates="portfolio",
-        cascade="all, delete"
-    )
+    assets = relationship("PortfolioAsset", back_populates="portfolio")
