@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.core.auth_dependencies import get_current_user
-from app.models import portfolio_asset, asset, price_history, portfolio
+from app.models import portfolio_asset, price_history, portfolio
 from app.models.user import User
 
 router = APIRouter(prefix="/dashboard", tags=["dashboard"])

@@ -35,6 +35,12 @@ asset_stock = asset.Asset(
     type="stock",
     currency="USD"
 )
+asset_msft = asset.Asset(
+    ticker="MSFT",
+    name="Microsoft",
+    type="stock",
+    currency="USD"
+)
 asset_crypto = asset.Asset(
     ticker="BTC-USD",
     name="Bitcoin",
@@ -42,7 +48,7 @@ asset_crypto = asset.Asset(
     currency="USD"
 )
 
-db.add_all([asset_etf, asset_stock, asset_crypto])
+db.add_all([asset_etf, asset_stock, asset_crypto, asset_msft])
 db.commit()
 db.refresh(asset_etf)
 db.refresh(asset_stock)
@@ -84,8 +90,16 @@ pa_crypto = portfolio_asset.PortfolioAsset(
     purchase_date=date(2024, 3, 1),
     currency="USD"
 )
+pa_msft = portfolio_asset.PortfolioAsset(
+    portfolio_id=portfolio_obj.id,
+    asset_id=asset_msft.id,
+    quantity=15,
+    average_price=350.0,
+    purchase_date=date(2024, 4, 15),
+    currency="USD"
+)
 
-db.add_all([pa_etf, pa_stock, pa_crypto])
+db.add_all([pa_etf, pa_stock, pa_crypto, pa_msft])
 db.commit()
 
 # 🔁 Transactions (uniquement sur VTI pour l'exemple)

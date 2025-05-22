@@ -35,7 +35,7 @@ export default function DashboardLayout({ children }) {
           className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-red-600"
         >
           <LogOut className="w-4 h-4" />
-          Déconnexion
+          Log Out
         </button>
       </aside>
 
@@ -52,7 +52,7 @@ export default function DashboardLayout({ children }) {
         <main className="flex-1 p-6 overflow-auto">
           {user && (
             <h2 className="mb-4 text-lg font-semibold">
-              Bonjour,{" "}
+              Welcome,
               <span className="ml-1 font-bold text-primary">
                 {user.username || user.email}
               </span>

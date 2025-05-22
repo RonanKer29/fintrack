@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 from dotenv import load_dotenv
 
-from app.routers import base, auth, asset, portfolio_assets, portfolios, users, transactions, price_history, dashboard, distribution
+from app.routers import base, auth, asset, portfolio_assets, portfolios, users, transactions, price_history, dashboard, distribution, top_assets
 
 load_dotenv()  # Load environment variables from .env
 
@@ -29,3 +29,4 @@ app.include_router(transactions.router)
 app.include_router(price_history.router)
 app.include_router(dashboard.router)
 app.include_router(distribution.router)
+app.include_router(top_assets.router)

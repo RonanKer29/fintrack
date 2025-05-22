@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState, useMemo } from "react";
 import { PieChart, Pie, Label } from "recharts";
 import { TrendingUp } from "lucide-react";
@@ -20,7 +18,7 @@ import {
 const chartConfig = {
   stock: {
     label: "Actions",
-    color: "hsl(var(--chart-1))",
+    color: "hsl(var(--chart-3))",
   },
   etf: {
     label: "ETF",
@@ -28,7 +26,7 @@ const chartConfig = {
   },
   crypto: {
     label: "Crypto",
-    color: "hsl(var(--chart-3))",
+    color: "hsl(var(--chart-1))",
   },
 };
 
@@ -58,7 +56,7 @@ const PortfolioChart = () => {
 
         setChartData(transformed);
       } catch (err) {
-        console.error("Erreur chargement données portfolio:", err);
+        console.error("Loading portfolio data error:", err);
       }
     };
 
@@ -72,8 +70,8 @@ const PortfolioChart = () => {
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Répartition du portefeuille</CardTitle>
-        <CardDescription>Actions / ETF / Crypto</CardDescription>
+        <CardTitle>Portfolio Allocation</CardTitle>
+        <CardDescription>Stocks / ETFs / Crypto</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
@@ -127,10 +125,10 @@ const PortfolioChart = () => {
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 font-medium leading-none">
-          Visualisation instantanée <TrendingUp className="w-4 h-4" />
+          Instant Overview <TrendingUp className="w-4 h-4" />
         </div>
         <div className="leading-none text-muted-foreground">
-          Répartition basée sur la valeur actuelle du marché
+          Allocation based on current market value
         </div>
       </CardFooter>
     </Card>

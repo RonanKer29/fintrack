@@ -21,7 +21,7 @@ export default function DashboardCard({
       </CardHeader>
       <CardContent>
         {loading ? (
-          <p className="text-muted-foreground">Chargement...</p>
+          <p className="text-muted-foreground">Loading...</p>
         ) : error ? (
           <p className="text-destructive">{error}</p>
         ) : (

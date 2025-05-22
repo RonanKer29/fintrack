@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Sheet,
   SheetContent,
@@ -11,11 +9,10 @@ import { Button } from "@/components/ui/button";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
-// ✅ Mutualisé ici pour usage partagé
 export const navItems = [
   { label: "Dashboard", to: "/dashboard", icon: <Home className="w-5 h-5" /> },
   {
-    label: "Portefeuilles",
+    label: "My Portfolios",
     to: "/portfolios",
     icon: <Folder className="w-5 h-5" />,
   },
@@ -24,10 +21,9 @@ export const navItems = [
     to: "/transactions",
     icon: <CreditCard className="w-5 h-5" />,
   },
-  { label: "Profil", to: "/profile", icon: <User className="w-5 h-5" /> },
+  { label: "My Profile", to: "/profile", icon: <User className="w-5 h-5" /> },
 ];
 
-// ✅ Sous-composant exporté pour le layout desktop
 export function NavLinks({ isDesktop = false }) {
   const location = useLocation();
 
@@ -83,7 +79,7 @@ export default function MobileMenu() {
             className="flex items-center justify-center w-full gap-2"
           >
             <LogOut className="w-4 h-4" />
-            Déconnexion
+            Log Out
           </Button>
         </div>
       </SheetContent>
@@ -91,5 +87,4 @@ export default function MobileMenu() {
   );
 }
 
-// 👇 Permet l'import MobileMenu.NavLinks
 MobileMenu.NavLinks = NavLinks;

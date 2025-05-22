@@ -26,3 +26,10 @@ class AssetOut(AssetBase):
 
     class Config:
         orm_mode = True
+
+# schemas/asset.py
+class TopAssetOut(BaseModel):
+    ticker: str
+    name: str | None
+    type: Literal["stock", "etf", "crypto"]
+    current_value: float

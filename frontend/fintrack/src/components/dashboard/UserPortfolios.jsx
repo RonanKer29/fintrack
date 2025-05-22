@@ -1,11 +1,4 @@
 import { useEffect, useState } from "react";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardDescription,
-} from "@/components/ui/card";
 import DashboardCard from "./DashboardCard";
 
 export default function UserPortfolios() {
@@ -23,12 +16,12 @@ export default function UserPortfolios() {
             Accept: "application/json",
           },
         });
-        if (!res.ok) throw new Error("Erreur lors du chargement");
+        if (!res.ok) throw new Error("Loading error");
 
         const data = await res.json();
         setPortfolioCount(data.length);
       } catch (err) {
-        setError("Erreur de chargement des portfolios");
+        setError("Porfolio data loading error");
         console.error(err);
       } finally {
         setLoading(false);
