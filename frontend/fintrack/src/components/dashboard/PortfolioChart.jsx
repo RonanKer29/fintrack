@@ -87,7 +87,7 @@ const PortfolioChart = () => {
               data={chartData}
               dataKey="value"
               nameKey="type"
-              innerRadius={60}
+              innerRadius={70}
               strokeWidth={5}
             >
               <Label

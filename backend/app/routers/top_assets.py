@@ -14,32 +14,32 @@ def get_top_assets_for_user(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    portfolios = db.query(Portfolio).filter(Portfolio.user_id == current_user.id).all()
-    if not portfolios:
-        raise HTTPException(status_code=404, detail="No portfolios found")
+    portfolio = db.query(Portfolio).filter(Portfolio.user_id == current_user.id).first()
+
+    if not portfolio:
+        raise HTTPException(status_code=404, detail="Portfolio not found")
 
     top_assets = []
 
-    for portfolio in portfolios:
-        for pa in portfolio.assets:
-            asset = pa.asset
-            if not asset or not asset.ticker:
-                continue
+    for pa in portfolio.assets:
+        asset = pa.asset
+        if not asset or not asset.ticker:
+            continue
 
-            live_price = get_live_price(asset.ticker)
-            if live_price is None:
-                continue
+        live_price = get_live_price(asset.ticker)
+        if live_price is None:
+            continue
 
-            current_value = float(pa.quantity) * live_price
+        current_value = float(pa.quantity) * live_price
 
-            top_assets.append({
-                "ticker": asset.ticker,
-                "name": asset.name,
-                "type": asset.type,
-                "current_value": round(current_value, 2),
-            })
+        top_assets.append({
+            "ticker": asset.ticker,
+            "name": asset.name,
+            "type": asset.type,
+            "current_value": round(current_value, 2),
+        })
 
-    # Grouper par ticker
+    # Grouper par ticker (utile si un actif revient plusieurs fois, par précaution)
     merged = {}
     for a in top_assets:
         if a["ticker"] in merged:
