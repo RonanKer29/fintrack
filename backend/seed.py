@@ -125,27 +125,40 @@ for tx in transactions_data:
 
 db.commit()
 
-# 📉 Price History (sur VTI uniquement)
-today = date.today()
-seven_days_ago = today - timedelta(days=7)
-
+# 📉 Price History (sur VTI, AAPL, MSFT)
 price_history_entries = [
-    price_history.PriceHistory(
-        asset_id=asset_etf.id,
-        date=seven_days_ago,
-        price=210.0,
-        currency="USD"
-    ),
-    price_history.PriceHistory(
-        asset_id=asset_etf.id,
-        date=today,
-        price=220.0,
-        currency="USD"
-    ),
+    # VTI
+    price_history.PriceHistory(asset_id=asset_etf.id, date=date(2024, 5, 16), price=213.74, currency='USD'),
+    price_history.PriceHistory(asset_id=asset_etf.id, date=date(2024, 5, 17), price=222.94, currency='USD'),
+    price_history.PriceHistory(asset_id=asset_etf.id, date=date(2024, 5, 18), price=222.64, currency='USD'),
+    price_history.PriceHistory(asset_id=asset_etf.id, date=date(2024, 5, 19), price=218.45, currency='USD'),
+    price_history.PriceHistory(asset_id=asset_etf.id, date=date(2024, 5, 20), price=211.3, currency='USD'),
+    price_history.PriceHistory(asset_id=asset_etf.id, date=date(2024, 5, 21), price=218.67, currency='USD'),
+    price_history.PriceHistory(asset_id=asset_etf.id, date=date(2024, 5, 22), price=217.44, currency='USD'),
+
+    # AAPL
+    price_history.PriceHistory(asset_id=asset_stock.id, date=date(2024, 5, 16), price=178.91, currency='USD'),
+    price_history.PriceHistory(asset_id=asset_stock.id, date=date(2024, 5, 17), price=184.92, currency='USD'),
+    price_history.PriceHistory(asset_id=asset_stock.id, date=date(2024, 5, 18), price=183.91, currency='USD'),
+    price_history.PriceHistory(asset_id=asset_stock.id, date=date(2024, 5, 19), price=186.66, currency='USD'),
+    price_history.PriceHistory(asset_id=asset_stock.id, date=date(2024, 5, 20), price=179.23, currency='USD'),
+    price_history.PriceHistory(asset_id=asset_stock.id, date=date(2024, 5, 21), price=178.03, currency='USD'),
+    price_history.PriceHistory(asset_id=asset_stock.id, date=date(2024, 5, 22), price=181.99, currency='USD'),
+
+    # MSFT
+    price_history.PriceHistory(asset_id=asset_msft.id, date=date(2024, 5, 16), price=359.83, currency='USD'),
+    price_history.PriceHistory(asset_id=asset_msft.id, date=date(2024, 5, 17), price=345.59, currency='USD'),
+    price_history.PriceHistory(asset_id=asset_msft.id, date=date(2024, 5, 18), price=353.82, currency='USD'),
+    price_history.PriceHistory(asset_id=asset_msft.id, date=date(2024, 5, 19), price=341.42, currency='USD'),
+    price_history.PriceHistory(asset_id=asset_msft.id, date=date(2024, 5, 20), price=343.84, currency='USD'),
+    price_history.PriceHistory(asset_id=asset_msft.id, date=date(2024, 5, 21), price=350.73, currency='USD'),
+    price_history.PriceHistory(asset_id=asset_msft.id, date=date(2024, 5, 22), price=351.29, currency='USD'),
 ]
 
 db.add_all(price_history_entries)
 db.commit()
+
+
 
 print("✅ Seed completed successfully.")
 db.close()
