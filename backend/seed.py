@@ -2,7 +2,7 @@
 
 from app.database import Base, engine, SessionLocal
 from app.models import user, asset, portfolio, portfolio_asset, transaction, price_history
-from datetime import date, timedelta
+from datetime import date
 from passlib.context import CryptContext
 
 # Init
