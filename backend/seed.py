@@ -2,8 +2,9 @@
 
 from app.database import Base, engine, SessionLocal
 from app.models import user, asset, portfolio, portfolio_asset, transaction, price_history
-from datetime import date
+from datetime import date, timedelta
 from passlib.context import CryptContext
+import random
 
 # Init
 db = SessionLocal()
@@ -42,7 +43,7 @@ asset_msft = asset.Asset(
     currency="USD"
 )
 asset_crypto = asset.Asset(
-    ticker="BTC-USD",
+    ticker="BTC",
     name="Bitcoin",
     type="crypto",
     currency="USD"
@@ -125,40 +126,37 @@ for tx in transactions_data:
 
 db.commit()
 
-# 📉 Price History (sur VTI, AAPL, MSFT)
-price_history_entries = [
-    # VTI
-    price_history.PriceHistory(asset_id=asset_etf.id, date=date(2024, 5, 16), price=213.74, currency='USD'),
-    price_history.PriceHistory(asset_id=asset_etf.id, date=date(2024, 5, 17), price=222.94, currency='USD'),
-    price_history.PriceHistory(asset_id=asset_etf.id, date=date(2024, 5, 18), price=222.64, currency='USD'),
-    price_history.PriceHistory(asset_id=asset_etf.id, date=date(2024, 5, 19), price=218.45, currency='USD'),
-    price_history.PriceHistory(asset_id=asset_etf.id, date=date(2024, 5, 20), price=211.3, currency='USD'),
-    price_history.PriceHistory(asset_id=asset_etf.id, date=date(2024, 5, 21), price=218.67, currency='USD'),
-    price_history.PriceHistory(asset_id=asset_etf.id, date=date(2024, 5, 22), price=217.44, currency='USD'),
+# 📉 Price History (3 mois dynamiques pour VTI, AAPL, MSFT)
+today = date.today()
+start_date = today - timedelta(days=89)  # 90 jours de données
 
-    # AAPL
-    price_history.PriceHistory(asset_id=asset_stock.id, date=date(2024, 5, 16), price=178.91, currency='USD'),
-    price_history.PriceHistory(asset_id=asset_stock.id, date=date(2024, 5, 17), price=184.92, currency='USD'),
-    price_history.PriceHistory(asset_id=asset_stock.id, date=date(2024, 5, 18), price=183.91, currency='USD'),
-    price_history.PriceHistory(asset_id=asset_stock.id, date=date(2024, 5, 19), price=186.66, currency='USD'),
-    price_history.PriceHistory(asset_id=asset_stock.id, date=date(2024, 5, 20), price=179.23, currency='USD'),
-    price_history.PriceHistory(asset_id=asset_stock.id, date=date(2024, 5, 21), price=178.03, currency='USD'),
-    price_history.PriceHistory(asset_id=asset_stock.id, date=date(2024, 5, 22), price=181.99, currency='USD'),
+price_history_entries = []
 
-    # MSFT
-    price_history.PriceHistory(asset_id=asset_msft.id, date=date(2024, 5, 16), price=359.83, currency='USD'),
-    price_history.PriceHistory(asset_id=asset_msft.id, date=date(2024, 5, 17), price=345.59, currency='USD'),
-    price_history.PriceHistory(asset_id=asset_msft.id, date=date(2024, 5, 18), price=353.82, currency='USD'),
-    price_history.PriceHistory(asset_id=asset_msft.id, date=date(2024, 5, 19), price=341.42, currency='USD'),
-    price_history.PriceHistory(asset_id=asset_msft.id, date=date(2024, 5, 20), price=343.84, currency='USD'),
-    price_history.PriceHistory(asset_id=asset_msft.id, date=date(2024, 5, 21), price=350.73, currency='USD'),
-    price_history.PriceHistory(asset_id=asset_msft.id, date=date(2024, 5, 22), price=351.29, currency='USD'),
-]
+for i in range(90):
+    current_date = start_date + timedelta(days=i)
+    price_history_entries += [
+        price_history.PriceHistory(
+            asset_id=asset_etf.id,
+            date=current_date,
+            price=210 + random.uniform(-5, 5),
+            currency='USD'
+        ),
+        price_history.PriceHistory(
+            asset_id=asset_stock.id,
+            date=current_date,
+            price=180 + random.uniform(-5, 5),
+            currency='USD'
+        ),
+        price_history.PriceHistory(
+            asset_id=asset_msft.id,
+            date=current_date,
+            price=350 + random.uniform(-10, 10),
+            currency='USD'
+        ),
+    ]
 
 db.add_all(price_history_entries)
 db.commit()
-
-
 
 print("✅ Seed completed successfully.")
 db.close()

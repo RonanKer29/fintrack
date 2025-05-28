@@ -4,8 +4,7 @@ export default function UserPortfolios() {
   return (
     <>
       <div className="flex justify-end gap-2 ">
-        <p className="text-muted-foreground">Created on Jan 2024 • </p>
-        <Badge variant="default">Private</Badge>
+        <Badge className="bg-[#facc15] text-[#0f0f0f]">Private</Badge>
       </div>
     </>
   );

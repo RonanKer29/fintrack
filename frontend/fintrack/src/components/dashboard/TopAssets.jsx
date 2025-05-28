@@ -35,18 +35,13 @@ export default function TopAsset() {
         if (!res.ok) throw new Error("Erreur lors du chargement des données");
         const topAssets = await res.json();
 
-        const colors = [
-          "--chart-1",
-          "--chart-2",
-          "--chart-3",
-          "--chart-4",
-          "--chart-5",
-        ];
+        // Jaune brutalisme : variantes cohérentes
+        const colors = ["#fde68a", "#facc15", "#eab308", "#ca8a04", "#a16207"];
 
         const formatted = topAssets.map((a, i) => ({
           ticker: a.ticker,
           value: a.current_value,
-          fill: `hsl(var(${colors[i % colors.length]}))`,
+          fill: colors[i % colors.length],
         }));
 
         setData(formatted);
@@ -74,10 +69,12 @@ export default function TopAsset() {
   };
 
   return (
-    <Card>
+    <Card className="bg-[#212121] text-white rounded-xl p-6">
       <CardHeader>
-        <CardTitle>Top 5 Assets</CardTitle>
-        <CardDescription>Based on current market value</CardDescription>
+        <CardTitle className="text-white">Top 5 actifs</CardTitle>
+        <CardDescription className="text-gray-400">
+          Basé sur la valeur de marché actuelle
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -85,7 +82,8 @@ export default function TopAsset() {
             accessibilityLayer
             data={data}
             layout="vertical"
-            margin={{ left: 0 }}
+            margin={{ left: 10 }}
+            barSize={20}
           >
             <YAxis
               dataKey="ticker"
@@ -93,24 +91,28 @@ export default function TopAsset() {
               tickLine={false}
               tickMargin={10}
               axisLine={false}
-              tickFormatter={(value) => chartConfig[value]?.label || value}
+              tick={{ fill: "#ddd", fontSize: 13 }}
             />
             <XAxis dataKey="value" type="number" hide />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Bar dataKey="value" layout="vertical" radius={5} />
+            <Bar
+              dataKey="value"
+              layout="vertical"
+              radius={5}
+              fill="#facc15"
+              isAnimationActive={true}
+            />
           </BarChart>
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 font-medium leading-none">
-          Trending assets this month <TrendingUp className="w-4 h-4" />
+        <div className="flex items-center gap-2 font-medium leading-none">
+          Tendance du mois <TrendingUp className="w-4 h-4" />
         </div>
-        <div className="leading-none text-muted-foreground">
-          Showing current top 5 by USD value
-        </div>
+        <div className="text-gray-400">Top 5 par valeur actuelle (USD)</div>
       </CardFooter>
     </Card>
   );

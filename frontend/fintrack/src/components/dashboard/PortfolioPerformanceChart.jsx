@@ -1,30 +1,57 @@
-import { useEffect, useState } from "react";
-import { TrendingUp } from "lucide-react";
-import { LineChart, Line, XAxis, CartesianGrid } from "recharts";
-
+import { useEffect, useState, useMemo } from "react";
 import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+import { subDays, subMonths, subYears, isAfter } from "date-fns";
+import { Card } from "@/components/ui/card";
 
-const chartConfig = {
-  value: {
-    label: "Portfolio Value",
-    color: "hsl(var(--chart-1))",
-  },
+const formatDate = (str) =>
+  new Date(str).toLocaleDateString("fr-FR", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+
+const applyFilter = (data, filter) => {
+  const now = new Date();
+  let startDate;
+
+  switch (filter) {
+    case "1J":
+      startDate = subDays(now, 1);
+      break;
+    case "7J":
+      startDate = subDays(now, 7);
+      break;
+    case "1M":
+      startDate = subMonths(now, 1);
+      break;
+    case "YTD":
+      startDate = new Date(now.getFullYear(), 0, 1);
+      break;
+    case "1A":
+      startDate = subYears(now, 1);
+      break;
+    case "TOUT":
+    default:
+      return data;
+  }
+
+  return data.filter((entry) => {
+    const entryDate = new Date(entry.date);
+    return isAfter(entryDate, startDate);
+  });
 };
 
 export default function PortfolioPerformanceChart() {
   const [chartData, setChartData] = useState([]);
+  const [filter, setFilter] = useState("YTD");
 
   useEffect(() => {
     const fetchHistory = async () => {
@@ -52,49 +79,92 @@ export default function PortfolioPerformanceChart() {
     fetchHistory();
   }, []);
 
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Portfolio Performance</CardTitle>
-        <CardDescription>
-          Daily valuation based on historical + live prices
-        </CardDescription>
-      </CardHeader>
+  const filteredData = useMemo(
+    () => applyFilter(chartData, filter),
+    [chartData, filter]
+  );
 
-      <CardContent>
-        <ChartContainer config={chartConfig}>
-          <LineChart data={chartData} margin={{ left: 12, right: 12 }}>
-            <CartesianGrid vertical={false} />
+  const latestValue =
+    filteredData.length > 0 ? filteredData[filteredData.length - 1].value : 0;
+  const latestDate =
+    filteredData.length > 0
+      ? formatDate(filteredData[filteredData.length - 1].date)
+      : "";
+
+  return (
+    <Card className="bg-[#212121] text-white rounded-xl p-6">
+      {/* Header */}
+      {/* Header */}
+      <div className="flex flex-col gap-4 mb-4 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <p className="text-sm text-gray-400">{latestDate}</p>
+          <h2 className="text-4xl font-bold">{latestValue} CHF</h2>
+        </div>
+
+        <div className="flex flex-wrap gap-2 text-sm font-medium">
+          {["1J", "7J", "1M", "YTD", "1A", "TOUT"].map((t) => (
+            <button
+              key={t}
+              onClick={() => setFilter(t)}
+              className={`px-3 py-1 rounded-full transition-colors ${
+                t === filter
+                  ? "bg-white text-black"
+                  : "text-gray-400 hover:text-white"
+              }`}
+            >
+              {t}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Chart */}
+      <div className="w-full h-[240px]">
+        <ResponsiveContainer>
+          <LineChart data={filteredData}>
+            <defs>
+              <linearGradient id="colorLine" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#facc15" stopOpacity={0.6} />
+                <stop offset="100%" stopColor="#facc15" stopOpacity={0} />
+              </linearGradient>
+            </defs>
+
+            <CartesianGrid vertical={false} stroke="#1f1f1f" />
             <XAxis
               dataKey="date"
               tickLine={false}
               axisLine={false}
-              tickMargin={8}
+              tick={{ fill: "#999", fontSize: 12 }}
+              tickMargin={10}
               tickFormatter={(value) => value.slice(5)} // MM-DD
             />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
+            <YAxis
+              tickLine={false}
+              axisLine={false}
+              tick={{ fill: "#999", fontSize: 12 }}
+              tickFormatter={(val) => `${val} CHF`}
+              width={60}
+            />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: "#1a1a1a",
+                border: "none",
+                color: "white",
+              }}
+              labelStyle={{ color: "#aaa" }}
+              formatter={(value) => [`${value} CHF`, "Valeur"]}
             />
             <Line
-              dataKey="value"
               type="monotone"
-              stroke="hsl(var(--chart-1))"
+              dataKey="value"
+              stroke="#facc15"
               strokeWidth={2}
               dot={false}
+              fill="url(#colorLine)"
             />
           </LineChart>
-        </ChartContainer>
-      </CardContent>
-
-      <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 font-medium leading-none">
-          Daily valuation trend <TrendingUp className="w-4 h-4" />
-        </div>
-        <div className="leading-none text-muted-foreground">
-          Based on your portfolio and current asset prices
-        </div>
-      </CardFooter>
+        </ResponsiveContainer>
+      </div>
     </Card>
   );
 }

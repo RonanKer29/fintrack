@@ -44,35 +44,48 @@ export default function PortfolioPerformance() {
 
   const isPositive = gain >= 0;
   const TrendIcon = isPositive ? TrendingUp : TrendingDown;
-  const gainColor = isPositive ? "text-green-600" : "text-red-600";
+  const gainColor = isPositive ? "text-emerald-400" : "text-rose-500";
 
   return (
-    <Card>
+    <Card className="bg-[#212121] text-white rounded-xl p-6">
       <CardHeader>
-        <CardTitle>Global Performance</CardTitle>
-        <CardDescription>Based on current market prices</CardDescription>
+        <CardTitle className="text-white">Performance globale</CardTitle>
+        <CardDescription className="text-gray-400">
+          Évaluation basée sur les prix actuels du marché
+        </CardDescription>
       </CardHeader>
+
       <CardContent className="space-y-3">
-        <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground">Cost Basis</span>
-          <span>${total_cost.toLocaleString()}</span>
+        <div className="flex justify-between text-sm text-gray-300">
+          <span>Prix d'achat total</span>
+          <span className="font-medium">
+            $
+            {total_cost.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+          </span>
         </div>
-        <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground">Current Value</span>
-          <span>${current_value.toLocaleString()}</span>
+        <div className="flex justify-between text-sm text-gray-300">
+          <span>Valeur actuelle</span>
+          <span className="font-medium">
+            $
+            {current_value.toLocaleString(undefined, {
+              maximumFractionDigits: 0,
+            })}
+          </span>
         </div>
-        <div className="flex justify-between font-semibold">
-          <span>Gain / Loss</span>
+        <div className="flex justify-between text-base font-semibold">
+          <span>Gain / Perte</span>
           <span className={gainColor}>
-            {gain >= 0 ? "+" : ""}${gain.toLocaleString()} (
+            {gain >= 0 ? "+" : ""}$
+            {gain.toLocaleString(undefined, { maximumFractionDigits: 0 })} (
             {percentage_gain.toFixed(2)}%)
           </span>
         </div>
       </CardContent>
-      <CardFooter className="flex items-center gap-2 text-sm text-muted-foreground">
-        <TrendIcon className="w-4 h-4" />
+
+      <CardFooter className="flex items-center gap-2 text-sm text-gray-400">
+        <TrendIcon className={`w-4 h-4 ${gainColor}`} />
         <span>
-          Portfolio {isPositive ? "increased" : "decreased"} by{" "}
+          Le portefeuille a {isPositive ? "augmenté" : "diminué"} de{" "}
           {Math.abs(percentage_gain).toFixed(2)}%
         </span>
       </CardFooter>
