@@ -13,15 +13,13 @@ class TransactionBase(BaseModel):
     price: Optional[float]
     currency: Optional[str]
     date: Optional[date]
-
+# schemas/transaction.py
 
 class TransactionCreate(TransactionBase):
-    user_id: int
-
+    pass  # plus de user_id ici
 
 class TransactionResponse(TransactionBase):
     id: int
     user_id: int
-
     class Config:
         from_attributes = True

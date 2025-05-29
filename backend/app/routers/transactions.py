@@ -3,11 +3,12 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.database import get_db
-
 from app.models.transaction import Transaction
 from app.models.portfolio import Portfolio
 from app.models.asset import Asset
 from app.schemas.transaction import TransactionCreate, TransactionResponse
+from app.core.auth_dependencies import get_current_user
+from app.models.user import User
 
 router = APIRouter(prefix="/transactions", tags=["Transactions"])
 
@@ -16,10 +17,8 @@ router = APIRouter(prefix="/transactions", tags=["Transactions"])
 def create_transaction(
     transaction: TransactionCreate,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    """
-    Create a new transaction (buy/sell/dividend) linked to a portfolio and asset.
-    """
     if transaction.asset_id:
         db_asset = db.query(Asset).filter(Asset.id == transaction.asset_id).first()
         if not db_asset:
@@ -30,7 +29,10 @@ def create_transaction(
         if not db_portfolio:
             raise HTTPException(status_code=404, detail="Portfolio not found")
 
-    new_tx = Transaction(**transaction.dict())
+    new_tx = Transaction(
+        **transaction.dict(),
+        user_id=current_user.id
+    )
     db.add(new_tx)
     db.commit()
     db.refresh(new_tx)
