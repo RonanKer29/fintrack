@@ -85,7 +85,7 @@ export default function NewTransaction() {
       if (!res.ok) throw new Error("Erreur lors de l’ajout");
 
       toast.success("Transaction ajoutée avec succès !");
-      navigate("/transactions");
+      navigate("/dashboard");
     } catch (error) {
       console.error("Erreur transaction :", error);
       toast.error("Échec de l’ajout. Vérifie les données.");

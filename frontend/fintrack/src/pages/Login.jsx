@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,14 @@ export default function Login() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  // Redirect if already logged in
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/dashboard");
+    }
+  }, [navigate]);
 
   const handleLogin = async ({ email, password }) => {
     setLoading(true);
@@ -25,7 +33,7 @@ export default function Login() {
       const data = await res.json();
       localStorage.setItem("token", data.access_token);
       navigate("/dashboard");
-    } catch (err) {
+    } catch {
       setError("Email ou mot de passe invalide.");
     } finally {
       setLoading(false);

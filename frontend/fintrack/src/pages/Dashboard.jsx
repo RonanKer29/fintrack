@@ -9,13 +9,11 @@ import PortfolioPerformanceChart from "@/components/dashboard/PortfolioPerforman
 export default function Dashboard() {
   return (
     <DashboardLayout>
-      {/* En-tête */}
       <div className="mb-6"></div>
       <UserPortfolios />
-      {/* Portefeuilles de l'utilisateur */}
+
       <div className="grid grid-cols-1 gap-4 mb-6 sm:grid-cols-2 lg:grid-cols-3"></div>
 
-      {/* Graphiques : Répartition + Top actifs */}
       <div className="grid grid-cols-1 grid-rows-2 gap-6 mb-6 md:grid-rows-2 md:grid-cols-2">
         <PortfolioPerformanceChart />
         <PortfolioChart />
@@ -23,7 +21,6 @@ export default function Dashboard() {
         <PortfolioPerformance />
       </div>
 
-      {/* Historique des transactions */}
       <div className="mb-6">
         <RecentTransactions />
       </div>
